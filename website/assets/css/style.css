@@ -706,12 +706,17 @@ html.is-loading, html.is-loading body { overflow: hidden; }
 .upd__close { position: absolute; top: 20px; right: 20px; }
 .disc__media { position: relative; aspect-ratio: 1 / 1; background: var(--card); overflow: hidden; }
 .disc__media video, .disc__media img { width: 100%; height: 100%; object-fit: contain; }
-/* card stays blank until its clip starts, then the video fades in from white */
-.js .disc__media video {
-  opacity: 0; transform: scale(1.03); filter: blur(6px);
-  transition: opacity 1.8s cubic-bezier(.4, 0, .2, 1), transform 2.4s cubic-bezier(.4, 0, .2, 1), filter 1.6s cubic-bezier(.4, 0, .2, 1);
+/* card stays blank until its clip is really painting frames, then a card-coloured veil fades off it.
+   Fading the <video> itself showed black on iOS, which paints an empty video layer black. */
+.disc__media video { background: var(--card); }
+.js .disc__media:has(> video)::after {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: var(--card);
+  transition: opacity 1.8s cubic-bezier(.4, 0, .2, 1);
 }
-.js .disc__media video.is-on { opacity: 1; transform: none; filter: none; }
+.js .disc__media.is-on::after { opacity: 0; }
+.js .disc__media:has(> video) video { transform: scale(1.03); transition: transform 2.4s cubic-bezier(.4, 0, .2, 1); }
+.js .disc__media.is-on video { transform: none; }
 
 /* live link under the Website card */
 .disc__live {

@@ -912,7 +912,16 @@
     if (!cards.length) return;
     const inners = cards.map((c) => $('.disc__inner', c));
     const videos = cards.map((c) => $('video', c));
-    videos.forEach((v) => v && v.addEventListener('playing', () => v.classList.add('is-on'), { once: true }));
+    // lift the veil only once a real frame has been painted (iOS reports "playing" before that)
+    const reveal = (v) => v.parentElement.classList.add('is-on');
+    videos.forEach((v) => {
+      if (!v) return;
+      v.addEventListener('playing', () => {
+        if (v.requestVideoFrameCallback) { v.requestVideoFrameCallback(() => reveal(v)); return; }
+        const tick = () => { if (v.currentTime > 0.05) { v.removeEventListener('timeupdate', tick); reveal(v); } };
+        v.addEventListener('timeupdate', tick);
+      }, { once: true });
+    });
     let tops = [];
     let active = -1;
 
@@ -939,7 +948,7 @@
           if (v.ended) return;
           const p = v.play();
           // autoplay blocked (e.g. low-power mode): show the still frame instead of a blank card
-          if (p && p.catch) p.catch(() => v.classList.add('is-on'));
+          if (p && p.catch) p.catch(() => reveal(v));
         } else {
           if (!v.paused) v.pause();
           if (i === idx + 1 && !v.getAttribute('src')) { v.preload = 'auto'; v.src = v.dataset.src; }
