@@ -566,6 +566,36 @@
     });
   }
 
+  // "View More" on the service cards → full-screen "page is being updated" notice
+  function initUpdatePopup() {
+    const pop = $('#upd');
+    if (!pop) return;
+    let open = false;
+    let from = null;
+    const show = (trigger) => {
+      if (open || modalOpen) return;
+      open = true; from = trigger;
+      pop.hidden = false;
+      requestAnimationFrame(() => requestAnimationFrame(() => pop.classList.add('is-open')));
+      if (lenis) lenis.stop(); else doc.style.overflow = 'hidden';
+      setTimeout(() => $('.upd__body', pop).focus({ preventScroll: true }), 60);
+    };
+    const hide = () => {
+      if (!open) return;
+      open = false;
+      pop.classList.remove('is-open');
+      if (lenis) lenis.start(); else doc.style.overflow = '';
+      setTimeout(() => { if (!open) pop.hidden = true; }, 480);
+      if (from && from.focus) from.focus({ preventScroll: true });
+    };
+    document.addEventListener('click', (e) => {
+      const t = e.target.closest('[data-update]');
+      if (t) { e.preventDefault(); show(t); return; }
+      if (open && (e.target.closest('[data-upd-close]') || e.target === pop)) hide();
+    });
+    document.addEventListener('keydown', (e) => { if (open && e.key === 'Escape') hide(); });
+  }
+
   /* ------------------------------------------------------------------
      Fallback when GSAP is unavailable (CDN blocked / offline)
      ------------------------------------------------------------------ */
@@ -882,6 +912,7 @@
     if (!cards.length) return;
     const inners = cards.map((c) => $('.disc__inner', c));
     const videos = cards.map((c) => $('video', c));
+    videos.forEach((v) => v && v.addEventListener('playing', () => v.classList.add('is-on'), { once: true }));
     let tops = [];
     let active = -1;
 
@@ -904,8 +935,11 @@
         if (!v) return;
         if (i === idx) {
           if (!v.getAttribute('src')) v.src = v.dataset.src;
+          // each clip plays once and then rests on its last frame
+          if (v.ended) return;
           const p = v.play();
-          if (p && p.catch) p.catch(() => {});
+          // autoplay blocked (e.g. low-power mode): show the still frame instead of a blank card
+          if (p && p.catch) p.catch(() => v.classList.add('is-on'));
         } else {
           if (!v.paused) v.pause();
           if (i === idx + 1 && !v.getAttribute('src')) { v.preload = 'auto'; v.src = v.dataset.src; }
@@ -1350,7 +1384,10 @@
       onUpdate: (self) => {
         const y = self.scroll();
         if (prog) prog.style.transform = `scaleX(${self.progress.toFixed(4)})`;
-        nav.classList.toggle('is-hidden', self.direction === 1 && y > svh() * 0.9 && !menuOpen && !modalOpen);
+        const hero = $('.hero');
+        nav.classList.toggle('is-past-hero', !!hero && y > hero.offsetHeight - nav.offsetHeight);
+        // hide-on-scroll is desktop only; on mobile the header stays pinned
+        nav.classList.toggle('is-hidden', isDesktop() && self.direction === 1 && y > svh() * 0.9 && !menuOpen && !modalOpen);
         const mid = 36;
         nav.classList.toggle('is-light', papers.some((p) => {
           const r = p.getBoundingClientRect();
@@ -1394,6 +1431,35 @@
     doc.addEventListener('mouseleave', () => cur.classList.add('is-hidden'));
   }
 
+  // hero tagline cycles through roles with a short glitch + scramble
+  function initRoles() {
+    if (REDUCED) return;
+    const wrap = $('[data-role]');
+    const a = $('[data-role-a]');
+    const b = $('[data-role-b]');
+    if (!wrap || !a || !b) return;
+    const roles = [['Creative', 'Designer'], ['Graphic', 'Designer'], ['Meta Ads', 'Specialist'], ['UI/UX', 'Designer'], ['Fullstack', 'Developer']];
+    const noise = 'ABCDEFGHJKLMNPRSTUVXYZ#/%&*<>';
+    const scramble = (s) => s.replace(/\S/g, (c) => (Math.random() < 0.45 ? noise[(Math.random() * noise.length) | 0] : c));
+    let i = 0;
+    const next = () => {
+      i = (i + 1) % roles.length;
+      const [ra, rb] = roles[i];
+      wrap.classList.remove('is-glitch');
+      void wrap.offsetWidth;
+      wrap.classList.add('is-glitch');
+      let n = 0;
+      const t = setInterval(() => {
+        n++;
+        if (n < 4) { a.textContent = scramble(ra); b.textContent = scramble(rb); return; }
+        clearInterval(t);
+        a.textContent = ra; b.textContent = rb;
+        $('.hero__tagline').setAttribute('aria-label', ra + ' ' + rb);
+      }, 90);
+    };
+    setInterval(() => { if (!document.hidden) next(); }, 2600);
+  }
+
   function initMagnetic() {
     if (!FINE) return;
     $$('.magnetic').forEach((el) => {
@@ -1421,10 +1487,12 @@
   safe('stack', initStack);
   safe('work', initWork);
   safe('modal', initModal);
+  safe('updatePopup', initUpdatePopup);
   safe('timeline', initTimeline);
   safe('copy', initCopy);
   safe('nav', initNav);
   safe('cursor', initCursor);
+  safe('roles', initRoles);
 
   // purely decorative motion — skipped when the visitor asks for reduced motion
   if (!REDUCED) {

@@ -136,7 +136,6 @@
           <div class="hero__top">
             <div class="hero__avail" data-hero-fade>
               <a href="#contact" class="avail magnetic" aria-label="Open for freelance projects — get in touch">
-                <span class="avail__dot" aria-hidden="true"></span>
                 <span class="avail__text">Open for freelance projects</span>
                 <span class="avail__go" aria-hidden="true">↗</span>
               </a>
@@ -147,7 +146,7 @@
           </div>
 
           <div class="hero__mid">
-            <p class="hero__tagline" data-hero-fade>Creative <em>Designer</em></p>
+            <p class="hero__tagline" data-hero-fade aria-label="Creative Designer"><span data-role aria-hidden="true"><span data-role-a>Creative</span> <em data-role-b>Designer</em></span></p>
             <div class="hero__side" data-hero-fade>
               <div class="hero__stats">
                 <div class="glass"><b>30+</b><span>Brands &amp;<br>creators</span></div>
@@ -280,15 +279,17 @@
               <div class="disc__info">
                 <div class="disc__top"><span class="disc__num">01</span><span class="label">UI/UX · Web</span></div>
                 <h3 class="disc__title">Website Design</h3>
-                <p class="disc__desc">Responsive websites designed for clarity and conversion — from structure and wireframes to polished, on-brand UI for desktop and mobile.</p>
                 <ul class="tags"><li>Landing pages</li><li>Company sites</li><li>Responsive UI</li></ul>
-                <p class="disc__clients mono">Laju Order · Zeuss · Hause Rooftop · Visual Kreatif</p>
-                <a class="disc__live" href="https://lajuorder.com" target="_blank" rel="noopener"><span class="disc__live-dot"></span>On screen: lajuorder.com ↗</a>
+                <button class="btn btn--ink disc__more magnetic" type="button" data-update>View More <span class="btn__arrow">→</span></button>
               </div>
+              <div class="disc__media"><video muted playsinline preload="none" poster="assets/img/disc/web.webp" data-src="assets/video/web.mp4" aria-label="Website on a laptop mockup animation"></video></div>
+              <!-- Interactive 3D laptop (assets/js/laptop3d.js), parked for now. To bring it back, swap it in for the video above:
               <div class="disc__media disc__media--3d" data-laptop data-cursor="Drag">
                 <img class="laptop3d__fallback" src="assets/img/laju/poster.webp" alt="The Laju Order website shown on a laptop screen" width="1152" height="720" loading="lazy" decoding="async">
                 <span class="laptop3d__hint mono" aria-hidden="true">↔ Drag to rotate</span>
               </div>
+              -->
+
             </div>
           </article>
 
@@ -297,11 +298,10 @@
               <div class="disc__info">
                 <div class="disc__top"><span class="disc__num">02</span><span class="label">UI/UX · App</span></div>
                 <h3 class="disc__title">Mobile App Design</h3>
-                <p class="disc__desc">Intuitive app interfaces that make everyday tasks — like taking a queue number for public services — feel effortless and friendly.</p>
                 <ul class="tags"><li>App UI</li><li>User flows</li><li>Design systems</li></ul>
-                <p class="disc__clients mono">Quecare</p>
+                <button class="btn btn--ink disc__more magnetic" type="button" data-update>View More <span class="btn__arrow">→</span></button>
               </div>
-              <div class="disc__media"><video muted playsinline loop preload="none" poster="assets/img/disc/app.webp" data-src="assets/video/app.mp4" aria-label="Quecare mobile app mockup animation"></video></div>
+              <div class="disc__media"><video muted playsinline preload="none" poster="assets/img/disc/app.webp" data-src="assets/video/app.mp4" aria-label="Quecare mobile app mockup animation"></video></div>
             </div>
           </article>
 
@@ -310,11 +310,10 @@
               <div class="disc__info">
                 <div class="disc__top"><span class="disc__num">03</span><span class="label">Editorial</span></div>
                 <h3 class="disc__title">Book Design</h3>
-                <p class="disc__desc">Cookbooks and business guides for chefs and founders — covers and interior layouts that feel appetising, clear and easy to follow.</p>
                 <ul class="tags"><li>Book covers</li><li>Interior layout</li><li>Print-ready</li></ul>
-                <p class="disc__clients mono">Elin Sulivan · Tenny Daud · Chef Anthony Christopher</p>
+                <button class="btn btn--ink disc__more magnetic" type="button" data-update>View More <span class="btn__arrow">→</span></button>
               </div>
-              <div class="disc__media"><video muted playsinline loop preload="none" poster="assets/img/disc/book.webp" data-src="assets/video/book.mp4" aria-label="Book cover mockup animation"></video></div>
+              <div class="disc__media"><video muted playsinline preload="none" poster="assets/img/disc/book.webp" data-src="assets/video/book.mp4" aria-label="Book cover mockup animation"></video></div>
             </div>
           </article>
 
@@ -323,11 +322,10 @@
               <div class="disc__info">
                 <div class="disc__top"><span class="disc__num">04</span><span class="label">Print · Collateral</span></div>
                 <h3 class="disc__title">Design Production</h3>
-                <p class="disc__desc">Company profiles, catalogues, calendars, menus, ID cards, roll-up banners — even truck livery. Print-ready, on-brand and built to be handled.</p>
                 <ul class="tags"><li>Company profile</li><li>Catalogue</li><li>Banners &amp; signage</li></ul>
-                <p class="disc__clients mono">Zeuss · Super Crete · Fortis · Hause</p>
+                <button class="btn btn--ink disc__more magnetic" type="button" data-update>View More <span class="btn__arrow">→</span></button>
               </div>
-              <div class="disc__media"><video muted playsinline loop preload="none" poster="assets/img/disc/prod.webp" data-src="assets/video/prod.mp4" aria-label="Roll-up banner mockup animation"></video></div>
+              <div class="disc__media"><video muted playsinline preload="none" poster="assets/img/disc/prod.webp" data-src="assets/video/prod.mp4" aria-label="Roll-up banner mockup animation"></video></div>
             </div>
           </article>
 
@@ -336,11 +334,10 @@
               <div class="disc__info">
                 <div class="disc__top"><span class="disc__num">05</span><span class="label">Content · Ads</span></div>
                 <h3 class="disc__title">Social Media Design</h3>
-                <p class="disc__desc">Scroll-stopping feeds and campaigns that sell — promos, product stories and seasonal pushes designed to stand out in a busy timeline.</p>
                 <ul class="tags"><li>Feed &amp; carousel</li><li>Campaigns</li><li>Paid ads</li></ul>
-                <p class="disc__clients mono">BlueSG · Ichiban Paint · Nasgor Nari</p>
+                <button class="btn btn--ink disc__more magnetic" type="button" data-update>View More <span class="btn__arrow">→</span></button>
               </div>
-              <div class="disc__media"><video muted playsinline loop preload="none" poster="assets/img/disc/social.webp" data-src="assets/video/social.mp4" aria-label="Instagram post design animation"></video></div>
+              <div class="disc__media"><video muted playsinline preload="none" poster="assets/img/disc/social.webp" data-src="assets/video/social.mp4" aria-label="Instagram post design animation"></video></div>
             </div>
           </article>
 
@@ -349,11 +346,10 @@
               <div class="disc__info">
                 <div class="disc__top"><span class="disc__num">06</span><span class="label">Identity</span></div>
                 <h3 class="disc__title">Logo &amp; Branding</h3>
-                <p class="disc__desc">Marks with meaning — logo concepts and identities built from a brand’s story, then shaped to work everywhere from an app icon to a storefront.</p>
                 <ul class="tags"><li>Logo design</li><li>Brand identity</li><li>Packaging</li></ul>
-                <p class="disc__clients mono">Digiofrealm · Ngombe Coffee · Al Mu’minaat</p>
+                <button class="btn btn--ink disc__more magnetic" type="button" data-update>View More <span class="btn__arrow">→</span></button>
               </div>
-              <div class="disc__media"><video muted playsinline loop preload="none" poster="assets/img/disc/logo.webp" data-src="assets/video/logo.mp4" aria-label="Digiofrealm logo reveal animation"></video></div>
+              <div class="disc__media"><video muted playsinline preload="none" poster="assets/img/disc/logo.webp" data-src="assets/video/logo.mp4" aria-label="Digiofrealm logo reveal animation"></video></div>
             </div>
           </article>
         </div>
@@ -683,6 +679,16 @@
       </footer>
     </section>
   </main>
+
+  <!-- ============ UPDATE POPUP ============ -->
+  <div class="upd" id="upd" role="dialog" aria-modal="true" aria-labelledby="upd-title" hidden>
+    <button class="modal__close upd__close" type="button" data-upd-close aria-label="Close"><span aria-hidden="true"></span></button>
+    <div class="upd__body" tabindex="-1">
+      <span class="label upd__label">Coming soon</span>
+      <h2 class="upd__title" id="upd-title">This page is being updated</h2>
+      <p class="upd__text">Please wait a little longer — it will be ready soon.</p>
+    </div>
+  </div>
 
   <!-- ============ PROJECT MODAL ============ -->
   <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" hidden>

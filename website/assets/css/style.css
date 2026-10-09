@@ -237,7 +237,13 @@ html.is-loading, html.is-loading body { overflow: hidden; }
   font-weight: 800; font-size: 14px; line-height: 1; letter-spacing: -.02em;
 }
 .nav__badge sup { font-size: 8px; margin-left: 1px; line-height: 1; }
-.nav__name { font-weight: 600; font-size: 15px; letter-spacing: -.01em; }
+.nav__name {
+  font-weight: 600; font-size: 15px; letter-spacing: -.01em;
+  display: inline-block; max-width: 12em; overflow: hidden; white-space: nowrap;
+  transition: opacity .45s var(--ease), transform .55s var(--ease), max-width .6s var(--ease), margin .6s var(--ease);
+}
+/* the name tucks away once the hero has scrolled past, and comes back on return */
+.nav.is-past-hero .nav__name { opacity: 0; transform: translateX(-8px); max-width: 0; margin-left: -12px; }
 .nav.is-light .nav__logo { color: var(--ink); }
 
 .nav__pill {
@@ -374,7 +380,7 @@ html.is-loading, html.is-loading body { overflow: hidden; }
   position: relative; isolation: isolate;
   --gap: 11px;
   display: inline-flex; align-items: center; gap: var(--gap);
-  height: 42px; padding: 0 18px 0 14px; border-radius: 999px;
+  height: 42px; padding: 0 18px; border-radius: 999px;
   background: linear-gradient(180deg, rgba(28, 28, 32, .72), rgba(10, 10, 12, .72));
   -webkit-backdrop-filter: blur(14px) saturate(150%); backdrop-filter: blur(14px) saturate(150%);
   box-shadow: 0 12px 34px -14px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 255, 255, .07);
@@ -436,6 +442,17 @@ html.is-loading, html.is-loading body { overflow: hidden; }
   white-space: nowrap;
 }
 .hero__tagline em { color: var(--accent-2); font-size: 1.12em; font-weight: 400; letter-spacing: -.02em; }
+/* rotating role with a quick glitch swap */
+.hero__tagline [data-role] { display: inline-block; position: relative; }
+.hero__tagline [data-role].is-glitch { animation: roleGlitch .42s steps(2, end); }
+@keyframes roleGlitch {
+  0%   { transform: translate(0); text-shadow: none; clip-path: inset(0); }
+  20%  { transform: translate(-3px, 1px); text-shadow: 2px 0 #ff3b30, -2px 0 #2fa8ff; clip-path: inset(10% 0 55% 0); }
+  40%  { transform: translate(3px, -1px); text-shadow: -2px 0 #ff3b30, 2px 0 #2fa8ff; clip-path: inset(55% 0 10% 0); }
+  60%  { transform: translate(-2px, 0); text-shadow: 2px 0 #ff3b30, -2px 0 #2fa8ff; clip-path: inset(0 0 30% 0); }
+  80%  { transform: translate(2px, 1px); text-shadow: -1px 0 #ff3b30, 1px 0 #2fa8ff; clip-path: inset(25% 0 0 0); }
+  100% { transform: translate(0); text-shadow: none; clip-path: inset(0); }
+}
 .hero__side { display: flex; align-items: flex-end; gap: 14px; }
 .hero__stats { display: grid; gap: 10px; }
 .glass {
@@ -490,12 +507,12 @@ html.is-loading, html.is-loading body { overflow: hidden; }
   .hero__tagline { font-size: clamp(22px, 6.4vw, 32px); }
 }
 @media (max-width: 599px) {
-  .avail { --gap: 10px; height: 38px; padding: 0 15px 0 12px; font-size: 12.5px; }
+  .avail { --gap: 10px; height: 38px; padding: 0 15px; font-size: 12.5px; }
   .hero__loc p { font-size: 10.5px; white-space: nowrap; }
 }
 @media (max-width: 380px) {
   .hero__top { gap: 10px; }
-  .avail { --gap: 9px; padding: 0 13px 0 11px; font-size: 12px; }
+  .avail { --gap: 9px; padding: 0 13px; font-size: 12px; }
   .hero__loc p { font-size: 10px; }
 }
 /* very short landscape phones: drop the curtain and let the hero breathe */
@@ -648,7 +665,8 @@ html.is-loading, html.is-loading body { overflow: hidden; }
 .services__lede, .work__lede, .toolkit__lede, .journey__lede { max-width: 44ch; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.55; color: var(--muted); }
 .journey__lede { color: var(--ink-muted); margin-top: 26px; }
 
-.stack { display: grid; gap: clamp(20px, 3vw, 44px); }
+/* generous gap = extra scroll while a card sits fully in view before the next one slides over it */
+.stack { display: grid; gap: clamp(90px, 30vh, 300px); gap: clamp(90px, 30svh, 300px); }
 .disc { position: sticky; top: calc(var(--nav-h) + 10px + var(--i) * 12px); }
 .disc__inner {
   position: relative; overflow: hidden;
@@ -671,10 +689,29 @@ html.is-loading, html.is-loading body { overflow: hidden; }
   font-family: var(--f-mono); font-size: 12px;
 }
 .disc__title { font-size: clamp(34px, 4.7vw, 80px); font-weight: 700; line-height: .94; letter-spacing: -.055em; }
-.disc__desc { max-width: 44ch; font-size: clamp(15px, 1.15vw, 18px); line-height: 1.55; color: var(--ink-muted); }
-.disc__clients { color: var(--ink-muted); font-size: 11px; line-height: 1.5; }
-.disc__media { position: relative; aspect-ratio: 16 / 11; background: var(--card); overflow: hidden; }
+.disc__more { align-self: flex-start; margin-top: auto; }
+
+/* full-screen "page is being updated" popup */
+.upd {
+  position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: 24px;
+  background: rgba(8, 8, 10, .96); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  color: var(--text, #f4f2ee); text-align: center;
+  opacity: 0; transition: opacity .45s;
+}
+.upd.is-open { opacity: 1; }
+.upd__body { display: grid; gap: 18px; justify-items: center; max-width: 720px; outline: none; transform: translateY(18px); transition: transform .6s var(--ease); }
+.upd.is-open .upd__body { transform: none; }
+.upd__title { font-size: clamp(38px, 7vw, 96px); font-weight: 700; line-height: .98; letter-spacing: -.05em; }
+.upd__text { font-size: clamp(16px, 1.4vw, 20px); line-height: 1.5; color: var(--muted); }
+.upd__close { position: absolute; top: 20px; right: 20px; }
+.disc__media { position: relative; aspect-ratio: 1 / 1; background: var(--card); overflow: hidden; }
 .disc__media video, .disc__media img { width: 100%; height: 100%; object-fit: contain; }
+/* card stays blank until its clip starts, then the video fades in from white */
+.js .disc__media video {
+  opacity: 0; transform: scale(1.03); filter: blur(6px);
+  transition: opacity 1.8s cubic-bezier(.4, 0, .2, 1), transform 2.4s cubic-bezier(.4, 0, .2, 1), filter 1.6s cubic-bezier(.4, 0, .2, 1);
+}
+.js .disc__media video.is-on { opacity: 1; transform: none; filter: none; }
 
 /* live link under the Website card */
 .disc__live {
@@ -716,25 +753,29 @@ html.is-loading, html.is-loading body { overflow: hidden; }
 .disc__media--3d.is-touched .laptop3d__hint { opacity: 0; }
 
 @media (max-width: 899px) {
-  /* every card takes the height of the tallest one; the extra room goes above the client line */
+  /* every card takes the height of the tallest one; the spare room collects under the button */
   .stack { grid-auto-rows: 1fr; }
   .disc__inner { height: 100%; grid-template-rows: auto 1fr; }
-  .disc__clients { margin-top: auto; }
-  .disc__media { order: -1; }
+  .disc__more { margin-top: 6px; }
+  .disc .tags { flex-wrap: nowrap; gap: 5px; }
+  .disc .tags li { white-space: nowrap; }
+  .disc__media { order: -1; padding-top: clamp(16px, 5vw, 28px); }
   .disc__info { gap: 12px; }
   .disc__title { margin-top: 2px; }
   .disc__top { order: -1; }
-  .disc .tags li { font-size: 12px; padding: 5px 10px; }
+  .disc .tags li { font-size: clamp(10px, 2.9vw, 12px); padding: 5px clamp(7px, 2.2vw, 10px); }
+}
+@media (max-width: 359px) {
+  .disc .tags { gap: 4px; }
+  .disc .tags li { font-size: 9px; padding: 4px 6px; }
 }
 @media (min-width: 900px) {
   .disc__inner {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    height: min(calc(100vh - var(--nav-h) - 110px), 660px);
-    height: min(calc(100svh - var(--nav-h) - 110px), 660px);
-    min-height: 480px;
   }
   .disc__title { margin-top: auto; }
-  .disc__media { aspect-ratio: auto; height: 100%; }
+  /* keep the mockup off the card's right edge */
+  .disc__media { padding: clamp(20px, 2.6vw, 44px) clamp(28px, 3.4vw, 54px) clamp(20px, 2.6vw, 44px) 0; }
 }
 
 /* ==========================================================================
@@ -835,9 +876,6 @@ html.is-loading, html.is-loading body { overflow: hidden; }
 }
 .more__sub { max-width: 44ch; margin: 18px auto 0; color: var(--muted); font-size: clamp(16px, 1.2vw, 18px); }
 .wall { position: relative; height: clamp(440px, 64vw, 900px); margin-top: clamp(20px, 3vw, 40px); perspective: 1500px; }
-.wall::before, .wall::after { content: ""; position: absolute; left: 0; right: 0; z-index: 2; height: 22%; pointer-events: none; }
-.wall::before { top: 0; background: linear-gradient(var(--bg), transparent); }
-.wall::after { bottom: 0; background: linear-gradient(transparent, var(--bg)); }
 .wall__plane {
   position: absolute; left: 50%; top: 50%;
   display: grid; gap: clamp(12px, 1.5vw, 24px);
