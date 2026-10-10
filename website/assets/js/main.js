@@ -27,6 +27,33 @@
      ------------------------------------------------------------------ */
   const IMG = 'assets/img/';
   const PROJECTS = {
+    laju: {
+      title: 'Laju Order', kicker: 'SaaS · Digital product checkout', tint: '#1d5fe0',
+      role: 'UI/UX Designer & Developer',
+      scope: ['Landing page', 'Checkout builder', 'Order dashboard', 'Responsive UI'],
+      link: { href: 'https://lajuorder.com', label: 'lajuorder.com' },
+      body: [
+        'Laju Order helps Indonesian creators sell digital products without the busywork — checkout pages, landing pages, order records, WhatsApp follow-ups and ad tracking live in one dashboard, and buyers pay straight into the seller’s own bank account.',
+        'I designed the landing page and the product UI around one promise: “jualan produk digital, tanpa ribet.” A checkout builder with packages, order bumps, coupons and countdowns; a dashboard that shows revenue, orders and conversion at a glance — clean, bright and mobile-first.'
+      ],
+      hero: { src: IMG + 'work/laju-web.webp', w: 1600, h: 1100, alt: 'Laju Order website on a browser window and a phone' },
+      gallery: [{ src: IMG + 'work/laju-page.webp', w: 1600, h: 3311, alt: 'The full Laju Order landing page' }],
+      wide: true
+    },
+    kasq: {
+      title: 'KasQ', kicker: 'Personal finance · Web app', tint: '#1fa85e',
+      role: 'Designer & Fullstack Developer', year: '2026',
+      scope: ['Product design', 'Frontend & PWA', 'Supabase backend', '8 visual themes'],
+      link: { href: 'https://kasq.agfauzul.com', label: 'kasq.agfauzul.com' },
+      body: [
+        'KasQ — “Mengelola Keuanganku” — is a personal finance app that runs in the browser with nothing to install. Accounts sync through Supabase, so the same books open on any phone or laptop.',
+        'I designed and built it end to end: income and expense tracking with fully custom categories, savings goals with an always-on Emergency Fund, leftover budget swept into savings automatically, a calculator that logs straight to a transaction, 12-month reports — and eight switchable visual themes, each with its own light and dark face.'
+      ],
+      hero: { src: IMG + 'work/kasq-app.webp', w: 1600, h: 1100, alt: 'KasQ personal finance app on three phones' },
+      gallery: [{ src: IMG + 'work/kasq-screens.webp', w: 1640, h: 859, alt: 'KasQ dashboard, transactions, savings and reports screens' }],
+      wide: true
+    },
+    // earlier case studies — not on the page right now; add the id back to ORDER and a card to bring one back
     zeuss: {
       title: 'Zeuss', kicker: 'Telecommunications · Indonesia', tint: '#0d6f7c',
       role: 'UI/UX & Graphic Designer', year: '2021 — 2022',
@@ -120,7 +147,7 @@
       hero: { src: IMG + 'work/bluesg.webp', w: 1600, h: 766, alt: 'Grid of BlueSG campaign designs' }
     }
   };
-  const ORDER = ['zeuss', 'hause', 'visualkreatif', 'ricebowl', 'menularis', 'supercrete', 'ichiban', 'bluesg'];
+  const ORDER = ['laju', 'kasq'];
 
   /* ------------------------------------------------------------------
      Small helpers that work with or without GSAP
@@ -273,7 +300,7 @@
     });
   }
 
-  // the ink sketch in About is "drawn" in when it scrolls into view
+  // the portrait in About is swept in when it scrolls into view
   function initSketch() {
     const img = $('[data-sketch] img');
     if (!img || REDUCED || !window.gsap || !window.ScrollTrigger) return;

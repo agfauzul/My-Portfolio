@@ -584,8 +584,8 @@ html.is-loading, html.is-loading body { overflow: hidden; }
   .about__grid { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); align-items: center; }
 }
 
-/* ink self-portrait: transparent PNG/WebP sits straight on the paper; on scroll it is
-   "drawn" in by a diagonal mask sweep (--rv: 1 hidden → 0 shown, animated in main.js) */
+/* paper-sculpture self-portrait: transparent WebP sits straight on the paper; on scroll it is
+   revealed by a diagonal mask sweep (--rv: 1 hidden → 0 shown, animated in main.js) */
 .sketch { position: relative; width: 100%; margin: 0 auto; }
 .sketch img {
   width: 100%; height: auto;
@@ -596,8 +596,8 @@ html.is-loading, html.is-loading body { overflow: hidden; }
   -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
 }
 @media (min-width: 900px) {
-  /* the drawing spills into the side gutter so it can be big without squeezing the copy */
-  .sketch { width: min(104%, 660px); margin-left: auto; margin-right: -4%; }
+  /* the portrait is taller than the old sketch, so it is capped a little narrower to stay in view */
+  .sketch { width: min(100%, 600px); margin-left: auto; margin-right: 0; }
 }
 @media (min-width: 600px) and (max-width: 899px) { .sketch { width: min(100%, 580px); } }
 @media (max-width: 599px) { .sketch { width: calc(100% + 16px); margin-left: -8px; } }
