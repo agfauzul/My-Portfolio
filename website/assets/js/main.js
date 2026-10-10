@@ -1,6 +1,6 @@
 /* ==========================================================================
    Anik G Fauzul — Portfolio interactions
-   Libraries (CDN): GSAP + ScrollTrigger, Lenis, Matter.js
+   Libraries (CDN): GSAP + ScrollTrigger, Lenis
    ========================================================================== */
 (() => {
   'use strict';
@@ -51,6 +51,58 @@
       ],
       hero: { src: IMG + 'work/kasq-app.webp', w: 1600, h: 1100, alt: 'KasQ personal finance app on three phones' },
       gallery: [{ src: IMG + 'work/kasq-screens.webp', w: 1640, h: 859, alt: 'KasQ dashboard, transactions, savings and reports screens' }],
+      wide: true
+    },
+    kai: {
+      title: 'Karyawan.AI', kicker: 'Webinar · AI for business & creators', tint: '#e0b400',
+      role: 'Designer & Meta Ads Specialist',
+      scope: ['Landing page', 'Campaign posters', 'Meta Ads'],
+      link: { href: 'https://webinar.karyawan.ai/batch-oct24', label: 'webinar.karyawan.ai' },
+      body: [
+        'Karyawan.AI teaches business owners and creators to build digital products, content and marketing with AI — no coding and no tech background required.',
+        'For the October batch webinar I designed the landing page: a loud yellow, sticker-and-ticker look built to turn scrollers into sign-ups. I also designed the campaign posters and ran the Meta Ads that sent traffic to it.'
+      ],
+      hero: { src: IMG + 'work/kai-lp.webp', w: 1600, h: 1100, alt: 'Karyawan.AI webinar landing page on a browser window and a phone' },
+      gallery: [{ src: IMG + 'work/kai-page.webp', w: 1600, h: 3556, alt: 'The Karyawan.AI webinar landing page, top section' }],
+      wide: true
+    },
+    aip: {
+      title: 'AIPreneur', kicker: 'Masterclass · AI for Business', tint: '#2563eb',
+      role: 'Designer & Meta Ads Specialist',
+      scope: ['Landing page', 'Campaign posters', 'Meta Ads'],
+      link: { href: 'https://aipreneuracademy.id/masterclass/', label: 'aipreneuracademy.id' },
+      body: [
+        'AIPreneur Academy’s AI for Business masterclass shows founders how to grow toward billion-rupiah monthly revenue with AI — without adding headcount or learning to code.',
+        'I designed the masterclass landing page — dark, cinematic and stage-lit around the mentor — along with the campaign posters, and ran the Meta Ads campaigns that brought buyers to it.'
+      ],
+      hero: { src: IMG + 'work/aip-lp.webp', w: 1600, h: 1100, alt: 'AIPreneur masterclass landing page on a browser window and a phone' },
+      gallery: [{ src: IMG + 'work/aip-page.webp', w: 1600, h: 3556, alt: 'The AIPreneur masterclass landing page, top section' }],
+      wide: true
+    },
+    jas: {
+      title: 'Jastip.ID', kicker: 'Webinar · Personal-shopper business', tint: '#f59e0b',
+      role: 'Designer & Meta Ads Specialist',
+      scope: ['Landing page', 'Campaign posters', 'Meta Ads'],
+      link: { href: 'https://event.jastip.id/webinar-online', label: 'event.jastip.id' },
+      body: [
+        'Jastip.ID’s online webinar teaches the RTL formula — Riset, Traffic, Logistik — for running a jastip (personal-shopper) business across borders, straight from your phone.',
+        'I designed the landing page in a bold travel-poster style, with a country ticker, ticket-style pricing and a live countdown. I also made the campaign posters and ran the Meta Ads behind it.'
+      ],
+      hero: { src: IMG + 'work/jas-lp.webp', w: 1600, h: 1100, alt: 'Jastip.ID webinar landing page on a phone and a browser window' },
+      gallery: [{ src: IMG + 'work/jas-page.webp', w: 1600, h: 3556, alt: 'The Jastip.ID webinar landing page, top section' }],
+      wide: true
+    },
+    amg: {
+      title: 'Makam Al-Azhar', kicker: 'Memorial park · Karawang', tint: '#1f7a55',
+      role: 'Designer & Meta Ads Specialist',
+      scope: ['Landing page', 'Campaign posters', 'Meta Ads'],
+      link: { href: 'https://makamalazharindonesia.id/', label: 'makamalazharindonesia.id' },
+      body: [
+        'Al-Azhar Memorial Garden is a Muslim memorial park in East Karawang, West Java, run according to Islamic law and ISO 9001 standards together with the Al-Azhar Islamic Boarding School Foundation (YPIA).',
+        'For an official sales agency I designed a landing page that feels calm and trustworthy yet easy to act on — plot types, promos and a clear path to WhatsApp — plus the posters and Meta Ads campaigns that brought families to it.'
+      ],
+      hero: { src: IMG + 'work/amg-lp.webp', w: 1600, h: 1100, alt: 'Al-Azhar Memorial Garden landing page on a browser window and a phone' },
+      gallery: [{ src: IMG + 'work/amg-page.webp', w: 1600, h: 3556, alt: 'The Al-Azhar Memorial Garden landing page, top section' }],
       wide: true
     },
     // earlier case studies — not on the page right now; add the id back to ORDER and a card to bring one back
@@ -147,7 +199,7 @@
       hero: { src: IMG + 'work/bluesg.webp', w: 1600, h: 766, alt: 'Grid of BlueSG campaign designs' }
     }
   };
-  const ORDER = ['laju', 'kasq'];
+  const ORDER = ['laju', 'kasq', 'kai', 'aip', 'jas', 'amg'];
 
   /* ------------------------------------------------------------------
      Small helpers that work with or without GSAP
@@ -1234,101 +1286,23 @@
         tool.addEventListener('pointerleave', () => gsap.to(tool, { rotateX: 0, rotateY: 0, duration: 0.9, ease: 'elastic.out(1, 0.5)' }));
       }
     });
-    gsap.from('.ai__list li', { y: 24, autoAlpha: 0, duration: 0.9, ease: 'power3.out', stagger: 0.07, scrollTrigger: { trigger: '.ai', start: 'top 92%', once: true } });
+    gsap.from('.ai__app', { y: 24, autoAlpha: 0, duration: 0.9, ease: 'power3.out', stagger: 0.07, clearProps: 'transform,opacity,visibility', scrollTrigger: { trigger: '.ai', start: 'top 92%', once: true } });
   }
 
-  /* ---------- Interests playground (Matter.js) ---------- */
-  function initPhysics() {
-    const box = $('.play__box');
-    if (!box || REDUCED || !window.Matter) return;
-    const { Engine, Runner, Bodies, Body, Composite, Mouse, MouseConstraint, Events } = window.Matter;
-    box.classList.add('is-physics');
-    const chips = $$('.chipx', box);
-    const engine = Engine.create();
-    engine.gravity.y = 1;
-    const world = engine.world;
-    let W = box.clientWidth;
-    let H = box.clientHeight;
-    let walls = [];
-
-    const buildWalls = () => {
-      if (walls.length) Composite.remove(world, walls);
-      const t = 400;
-      const o = { isStatic: true, friction: 0.4, restitution: 0.3 };
-      walls = [
-        Bodies.rectangle(W / 2, H + t / 2, W + t * 2, t, o),
-        Bodies.rectangle(-t / 2, 0, t, H * 5, o),
-        Bodies.rectangle(W + t / 2, 0, t, H * 5, o),
-        Bodies.rectangle(W / 2, -H * 2.5 - t / 2, W + t * 2, t, o)
-      ];
-      Composite.add(world, walls);
-    };
-    buildWalls();
-
-    const bodies = chips.map((el, i) => {
-      const w = el.offsetWidth;
-      const h = el.offsetHeight;
-      const x = clamp(W * (0.12 + Math.random() * 0.76), w / 2 + 6, W - w / 2 - 6);
-      const y = -h - i * h * 0.85 - Math.random() * 60;
-      const opts = { restitution: 0.42, friction: 0.08, frictionAir: 0.014, density: 0.002 };
-      const b = el.classList.contains('chipx--emoji')
-        ? Bodies.circle(x, y, w / 2, opts)
-        : Bodies.rectangle(x, y, w, h, { ...opts, chamfer: { radius: h / 2 - 1 }, angle: (Math.random() - 0.5) * 0.6 });
-      b.el = el; b.w = w; b.h = h;
-      return b;
-    });
-
-    const sync = () => {
-      for (const b of bodies) {
-        b.el.style.transform = `translate3d(${(b.position.x - b.w / 2).toFixed(1)}px, ${(b.position.y - b.h / 2).toFixed(1)}px, 0) rotate(${b.angle.toFixed(3)}rad)`;
-      }
-    };
-    Events.on(engine, 'afterUpdate', sync);
-    sync();
-
-    if (FINE) {
-      const mouse = Mouse.create(box);
-      ['wheel', 'mousewheel', 'DOMMouseScroll'].forEach((ev) => mouse.element.removeEventListener(ev, mouse.mousewheel));
-      mouse.element.removeEventListener('touchmove', mouse.mousemove);
-      mouse.element.removeEventListener('touchstart', mouse.mousedown);
-      mouse.element.removeEventListener('touchend', mouse.mouseup);
-      const mc = MouseConstraint.create(engine, { mouse, constraint: { stiffness: 0.18, damping: 0.08, render: { visible: false } } });
-      Composite.add(world, mc);
-      window.addEventListener('mouseup', () => { mouse.button = -1; });
+  /* ---------- Things I love doing (bento) ---------- */
+  // tiles carry small looping CSS animations; they only run while the grid is on screen
+  function initLove() {
+    const grid = $('[data-love]');
+    if (!grid) return;
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => grid.classList.toggle('is-live', e.isIntersecting), { threshold: 0.05 }).observe(grid);
     } else {
-      chips.forEach((el, i) => {
-        el.addEventListener('click', () => {
-          const b = bodies[i];
-          Body.setVelocity(b, { x: (Math.random() - 0.5) * 12, y: -15 - Math.random() * 7 });
-          Body.setAngularVelocity(b, (Math.random() - 0.5) * 0.35);
-        });
-      });
+      grid.classList.add('is-live');
     }
-
-    const runner = Runner.create();
-    let running = false;
-    let dropped = false;
-    new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) {
-        if (!dropped) { Composite.add(world, bodies); dropped = true; }
-        if (!running) { Runner.run(runner, engine); running = true; }
-      } else if (running) {
-        Runner.stop(runner);
-        running = false;
-      }
-    }, { threshold: 0.2 }).observe(box);
-
-    let rt = 0;
-    window.addEventListener('resize', () => {
-      clearTimeout(rt);
-      rt = setTimeout(() => {
-        const nW = box.clientWidth;
-        const nH = box.clientHeight;
-        if (nW === W && nH === H) return;
-        W = nW; H = nH;
-        buildWalls();
-        bodies.forEach((b) => Body.setPosition(b, { x: clamp(b.position.x, b.w / 2, W - b.w / 2), y: Math.min(b.position.y, H - b.h / 2) }));
-      }, 200);
+    if (REDUCED || !window.gsap || !window.ScrollTrigger) return;
+    gsap.from($$('.love__tile', grid), {
+      y: 40, autoAlpha: 0, duration: 1, ease: 'power3.out', stagger: 0.06,
+      scrollTrigger: { trigger: grid, start: 'top 88%', once: true }
     });
   }
 
@@ -1540,7 +1514,7 @@
     safe('wall', initWall);
     safe('years', initYears);
     safe('tools', initTools);
-    safe('physics', initPhysics);
+    safe('love', initLove);
     safe('contact', initContact);
     safe('magnetic', initMagnetic);
   }
