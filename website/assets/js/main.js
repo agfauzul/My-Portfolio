@@ -241,16 +241,6 @@
 
   let lenis = null;
   let menuOpen = false;
-  let toastTimer = 0;
-
-  function toast(msg) {
-    const t = $('.toast');
-    if (!t) return;
-    t.textContent = msg;
-    t.classList.add('is-show');
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove('is-show'), 2400);
-  }
 
   function rollify(root = document) {
     $$('.btn', root).forEach((btn) => {
@@ -327,30 +317,6 @@
     });
   }
 
-  function initCopy() {
-    $$('[data-copy]').forEach((btn) => {
-      btn.addEventListener('click', async () => {
-        const text = btn.dataset.copy;
-        let ok = false;
-        try {
-          await navigator.clipboard.writeText(text);
-          ok = true;
-        } catch (_) {
-          const ta = document.createElement('textarea');
-          ta.value = text;
-          ta.setAttribute('readonly', '');
-          ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;pointer-events:none';
-          document.body.appendChild(ta);
-          ta.select();
-          try { ok = document.execCommand('copy'); } catch (__) { ok = false; }
-          ta.remove();
-        }
-        btn.classList.add('is-copied');
-        toast(ok ? 'Email copied — talk soon!' : text);
-        setTimeout(() => btn.classList.remove('is-copied'), 2200);
-      });
-    });
-  }
 
   // the portrait in About is swept in when it scrolls into view
   function initSketch() {
@@ -686,7 +652,6 @@
     safe('buttons', () => rollify());
     safe('menu', initMenu);
     safe('anchors', initAnchors);
-    safe('copy', initCopy);
     safe('images', warmImages);
     safe('heroFx', heroFx);
     safe('laptop', initLaptop);
@@ -1306,6 +1271,20 @@
     });
   }
 
+  // the contact arc gets a tighter curve on phones so it still reads round in a narrow box
+  function initArcShape() {
+    const svg = $('.arc svg');
+    const path = $('#arcPath');
+    if (!svg || !path) return;
+    const mq = media('(max-width: 599px)');
+    const apply = () => {
+      svg.setAttribute('viewBox', mq.matches ? '0 0 800 340' : '0 0 1600 340');
+      path.setAttribute('d', mq.matches ? 'M-180,380 C40,-90 760,-90 980,380' : 'M-260,350 C120,-70 1480,-70 1860,350');
+    };
+    apply();
+    if (mq.addEventListener) mq.addEventListener('change', apply);
+  }
+
   /* ---------- Contact ---------- */
   function initContact() {
     const script = $('.contact__script');
@@ -1322,11 +1301,25 @@
       scrollTrigger: { trigger: '.contact__title', start: 'top 88%', once: true }
     });
 
+    // the arc text drifts right → left (the way it reads); it slides exactly one phrase per loop so the seam never shows
     const tp = $('.arc textPath');
     if (tp) {
-      gsap.fromTo(tp, { attr: { startOffset: '0%' } }, {
-        attr: { startOffset: '-38%' }, ease: 'none',
-        scrollTrigger: { trigger: '.arc', start: 'top bottom', end: 'bottom top', scrub: 0.5 }
+      const phrase = tp.dataset.phrase || '';
+      let drift = null;
+      const startDrift = () => {
+        let unit = 0;
+        try { unit = tp.getSubStringLength(0, phrase.length); } catch (_) { unit = 0; }
+        if (!unit) return;
+        if (drift) drift.kill();
+        drift = gsap.fromTo(tp, { attr: { startOffset: 0 } }, { attr: { startOffset: -unit }, duration: unit / 110, ease: 'none', repeat: -1 });
+      };
+      startDrift();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(startDrift);
+      let rt = 0;
+      window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(startDrift, 250); });
+      ScrollTrigger.create({
+        trigger: '.arc', start: 'top bottom', end: 'bottom top',
+        onToggle: (self) => { if (drift) { if (self.isActive) drift.play(); else drift.pause(); } }
       });
     }
 
@@ -1499,10 +1492,10 @@
   safe('modal', initModal);
   safe('updatePopup', initUpdatePopup);
   safe('timeline', initTimeline);
-  safe('copy', initCopy);
   safe('nav', initNav);
   safe('cursor', initCursor);
   safe('roles', initRoles);
+  safe('arc', initArcShape);
 
   // purely decorative motion — skipped when the visitor asks for reduced motion
   if (!REDUCED) {
