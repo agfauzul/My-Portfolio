@@ -105,6 +105,61 @@
       gallery: [{ src: IMG + 'work/amg-page.webp', w: 1600, h: 3556, alt: 'The Al-Azhar Memorial Garden landing page, top section' }],
       wide: true
     },
+    bl: {
+      title: 'Berkah Land', kicker: 'Islamic property developer · Landing page', tint: '#c9a25a',
+      role: 'Fullstack Developer',
+      scope: ['Landing page design', 'Frontend build', 'Responsive UI', 'Deployment'],
+      link: { href: 'https://berkahlandgroup.com/ads/', label: 'berkahlandgroup.com' },
+      body: [
+        'Berkah Land Group is a sharia property developer building homes inside a complete Islamic ecosystem — a mosque nearby, integrated Islamic schooling and ownership schemes with no interest, starting from around IDR 600 million.',
+        'I designed and built the ad landing page end to end: a calm navy-and-gold look that feels trustworthy, sections that walk families through the ecosystem and available units, and clear calls to view units or book a site visit.'
+      ],
+      hero: { src: IMG + 'work/bl-lp.webp', w: 1600, h: 1100, alt: 'Berkah Land Group landing page on a browser window and a phone' },
+      gallery: [{ src: IMG + 'work/bl-page.webp', w: 1600, h: 3556, alt: 'The Berkah Land Group landing page, top sections' }],
+      wide: true
+    },
+    joni: {
+      title: 'Uncle Joni', kicker: 'Men’s intimate care · Bundle sales page', tint: '#ff5a1f',
+      role: 'Fullstack Developer',
+      scope: ['Sales page design', 'Frontend build', 'Bundle & pricing sections', 'Deployment'],
+      link: { href: 'https://jonicream.com/paket/', label: 'jonicream.com' },
+      body: [
+        'Uncle Joni is a care range made for men’s sensitive areas — Joni Wash, Joni Cream and Joni Cling — BPOM-registered, halal-certified and dermatologically tested.',
+        'I designed and built the bundle sales page from scratch: a bold orange-and-black look straight from the packaging, a problem-to-solution story, a simple three-step routine, ingredient highlights and bundle offers with up to 35% off.'
+      ],
+      hero: { src: IMG + 'work/joni-lp.webp', w: 1600, h: 1100, alt: 'Uncle Joni bundle landing page on a browser window and a phone' },
+      gallery: [{ src: IMG + 'work/joni-page.webp', w: 1600, h: 3556, alt: 'The Uncle Joni bundle page, top sections' }],
+      wide: true
+    },
+    rose: {
+      title: 'Roseville', kicker: 'SOHO & Suite rentals · BSD City', tint: '#b8923f',
+      role: 'Fullstack Developer',
+      scope: ['Landing page design', 'Frontend build', 'Unit catalogue', 'Deployment'],
+      link: { href: 'https://sewaroseville.id/', label: 'sewaroseville.id' },
+      body: [
+        'Roseville SOHO & Suite offers move-in-ready SOHO units and premium apartments in Sunburst CBD, BSD City — semi-furnished, with five-star hotel facilities, from around IDR 5 million a month.',
+        'I designed and built the rental landing page end to end: a dark, gold-accented luxury look, a full-screen tower hero, facility highlights and a unit catalogue from studio to two-bedroom, each with its own enquiry button.'
+      ],
+      hero: { src: IMG + 'work/rose-lp.webp', w: 1600, h: 1100, alt: 'Roseville apartment rental landing page on a phone and a browser window' },
+      gallery: [{ src: IMG + 'work/rose-page.webp', w: 1600, h: 3556, alt: 'The Roseville rental landing page, top sections' }],
+      wide: true
+    },
+    ithbi: {
+      title: 'ITHBI', kicker: 'Book design · Akademi Ath-Thibbul Badil Indonesia', tint: '#0d7a3a',
+      role: 'Graphic Designer', year: '2026',
+      scope: ['Cover design', 'Interior layout', 'Infographics', '44 pages, full colour'],
+      body: [
+        '“Suplemen Sehat dengan Konsep Panas & Dingin” is a book by Ust. Abdurrahman Dani & Team ITHBI that gathers prophetic medicine (thibbun nabawi) and classical Arabic medicine into one practical guide to the four mizaj — hot, cold, dry and moist — and the foods that suit each one.',
+        'I designed the cover and all 44 interior pages. Each mizaj has its own colour code that runs through the whole book, and the dense material is broken into tables, flow diagrams, recipe-style food cards and full-bleed photography, so a heavy subject is easy to read.'
+      ],
+      hero: { src: IMG + 'work/ithbi-book.webp', w: 1600, h: 1100, alt: 'ITHBI book — hardcover standing next to an open spread' },
+      gallery: [
+        { src: IMG + 'work/ithbi-spread-1.webp', w: 1600, h: 980, alt: 'Spread: the four mizaj explained with colour-coded cards' },
+        { src: IMG + 'work/ithbi-spread-2.webp', w: 1600, h: 980, alt: 'Spread: four mizaj of fruit, with a taste-to-mizaj table' },
+        { src: IMG + 'work/ithbi-spread-3.webp', w: 1600, h: 980, alt: 'Spread: non-medical causes and a prevention flow diagram' }
+      ],
+      wide: true
+    },
     // earlier case studies — not on the page right now; add the id back to ORDER and a card to bring one back
     zeuss: {
       title: 'Zeuss', kicker: 'Telecommunications · Indonesia', tint: '#0d6f7c',
@@ -199,7 +254,7 @@
       hero: { src: IMG + 'work/bluesg.webp', w: 1600, h: 766, alt: 'Grid of BlueSG campaign designs' }
     }
   };
-  const ORDER = ['laju', 'kasq', 'kai', 'aip', 'jas', 'amg'];
+  const ORDER = ['laju', 'kasq', 'kai', 'aip', 'jas', 'amg', 'bl', 'joni', 'rose', 'ithbi'];
 
   /* ------------------------------------------------------------------
      Small helpers that work with or without GSAP
@@ -320,8 +375,17 @@
 
   // the portrait in About is swept in when it scrolls into view
   function initSketch() {
+    const fig = $('[data-sketch]');
     const img = $('[data-sketch] img');
+    // doodle loops around the portrait only run while it is on screen
+    if (fig && 'IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => fig.classList.toggle('is-live', e.isIntersecting), { threshold: 0.05 }).observe(fig);
+    }
     if (!img || REDUCED || !window.gsap || !window.ScrollTrigger) return;
+    gsap.from($$('.doodles .dd', fig), {
+      autoAlpha: 0, y: 24, duration: 0.9, ease: 'back.out(1.6)', stagger: 0.08, delay: 0.9,
+      scrollTrigger: { trigger: img, start: 'top 80%', once: true }
+    });
     gsap.fromTo(img, { '--rv': 1, opacity: 0.4 }, {
       '--rv': 0, opacity: 1, duration: 2.4, ease: 'power2.inOut',
       scrollTrigger: { trigger: img, start: 'top 80%', once: true }

@@ -597,10 +597,65 @@ html.is-loading, html.is-loading body { overflow: hidden; }
 }
 @media (min-width: 900px) {
   /* the portrait is taller than the old sketch, so it is capped a little narrower to stay in view */
-  .sketch { width: min(100%, 600px); margin-left: auto; margin-right: 0; }
+  .sketch { width: min(100%, 540px); margin-left: auto; margin-right: auto; }
 }
 @media (min-width: 600px) and (max-width: 899px) { .sketch { width: min(100%, 580px); } }
 @media (max-width: 599px) { .sketch { width: calc(100% + 16px); margin-left: -8px; } }
+
+/* doodle-art motion around the portrait: one layer behind it, one in front (kept clear of the face) */
+.sketch img { position: relative; z-index: 1; }
+.doodles { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.doodles--back { z-index: 0; }
+.doodles--front { z-index: 2; }
+.doodles path, .doodles ellipse, .doodles circle { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+.doodles .f { fill: var(--accent); stroke: none; }
+.doodles .f-2 { fill: var(--accent-2); stroke: none; }
+.doodles .f-ink { fill: var(--ink); stroke: none; }
+.doodles .f-soft { fill: rgba(255, 106, 26, .14); }
+.doodles .f-paper { fill: #fff; }
+.doodles .s-paper { stroke: var(--paper); }
+.doodles .f-cursor { fill: var(--accent); stroke: var(--paper); stroke-width: 5; }
+.doodles .d-orbit { stroke-width: 4; stroke-dasharray: 2 26; opacity: .55; }
+.doodles .d-draw { stroke-dasharray: 100; stroke-dashoffset: 100; }
+.doodles .d-reel { stroke-width: 9; stroke-linecap: butt; stroke-dasharray: 10 14; }
+
+.dm, .d-flash, .d-lid, .d-rays, .d-pop { transform-box: fill-box; transform-origin: center; }
+.d-float { animation: ddFloat 5s ease-in-out infinite; }
+.d-float--slow { animation-duration: 6.5s; animation-delay: -2s; }
+.d-float--fast { animation-duration: 3.8s; animation-delay: -1s; }
+.d-spin { animation: ddSpin 26s linear infinite; }
+.d-orbit { animation: ddSpin 60s linear infinite; }
+.d-wiggle { animation: ddWiggle 4.4s ease-in-out infinite; }
+.d-draw { animation: ddDraw 5s ease-in-out infinite; }
+.d-flash { animation: ddFlash 3.2s ease-in-out infinite; }
+.d-flash--loop { animation-duration: 3.6s; }
+.d-blink { animation: blink 1.2s steps(1) infinite; }
+.d-lid { transform-origin: 50% 100%; animation: ddLid 3.4s ease-in-out infinite; }
+.d-reel { animation: ddReel 1.6s linear infinite; }
+.d-pop { animation: ddPop 2.4s ease-in-out infinite; }
+.d-pop--slow { animation-duration: 3.2s; }
+.d-click { animation: ddClick 3s ease-in-out infinite; }
+.d-rays { animation: ddRays 3s ease-in-out infinite; }
+.d-twinkle { animation: ddTwinkle 2.8s ease-in-out infinite; }
+.d-twinkle--mid { animation-delay: -.9s; }
+.d-twinkle--late { animation-delay: -1.8s; }
+
+@keyframes ddFloat { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-14px) rotate(2deg); } }
+@keyframes ddSpin { to { transform: rotate(360deg); } }
+@keyframes ddWiggle { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+@keyframes ddDraw { 0% { stroke-dashoffset: 100; } 50%, 70% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -100; } }
+@keyframes ddFlash { 0%, 60%, 100% { opacity: 0; transform: scale(.6); } 70% { opacity: 1; transform: scale(1.1); } 85% { opacity: 0; } }
+@keyframes ddLid { 0%, 55%, 100% { transform: translateY(0) rotate(0); } 70% { transform: translateY(-18px) rotate(-8deg); } }
+@keyframes ddReel { to { stroke-dashoffset: -24; } }
+@keyframes ddPop { 0%, 55%, 100% { transform: scale(1); } 65% { transform: scale(1.25); } 75% { transform: scale(.9); } }
+@keyframes ddClick { 0%, 100% { transform: translate(0, 0); } 40% { transform: translate(-16px, -12px); } 48% { transform: translate(-16px, -12px) scale(.88); } 56% { transform: translate(-16px, -12px) scale(1); } }
+@keyframes ddRays { 0%, 42%, 70%, 100% { opacity: 0; } 50%, 60% { opacity: 1; } }
+@keyframes ddTwinkle { 0%, 100% { transform: scale(.5) rotate(0); opacity: .35; } 50% { transform: scale(1.1) rotate(45deg); opacity: 1; } }
+
+/* loops only run while the portrait is on screen */
+.doodles * { animation-play-state: paused; }
+.sketch.is-live .doodles * { animation-play-state: running; }
+@media (prefers-reduced-motion: reduce) { .doodles * { animation: none !important; } .doodles .d-draw { stroke-dashoffset: 0; } }
 @media (max-width: 899px) { .about__grid { margin-top: 40px; gap: 32px; } }
 
 .about__lead { font-size: clamp(23px, 2.35vw, 38px); font-weight: 500; line-height: 1.2; letter-spacing: -.03em; text-wrap: pretty; }
